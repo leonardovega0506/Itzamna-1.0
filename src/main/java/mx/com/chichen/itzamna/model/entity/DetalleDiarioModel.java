@@ -1,11 +1,17 @@
 package mx.com.chichen.itzamna.model.entity;
 
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.*;
+import org.hibernate.Hibernate;
+
+import java.util.Objects;
 
 @Entity
 @Table(name = "tbl_detalle_diario")
-@Data
+@Getter
+@Setter
+@ToString
+@RequiredArgsConstructor
 public class DetalleDiarioModel {
 
     @Id
@@ -13,7 +19,7 @@ public class DetalleDiarioModel {
     @Column(name = "id_detalle_diario")
     private Long idDetalleDiario;
 
-    @Column(name = "total_detalle_venta")
+    @Column(name = "total_detalle_venta",nullable = false,precision = 8, scale = 2)
     private Double totalDetalleVenta;
 
     @ManyToOne
@@ -25,7 +31,19 @@ public class DetalleDiarioModel {
     private CompraModel compraDiario;
 
     @ManyToOne
-    @JoinColumn(name = "diario")
+    @JoinColumn(name = "diario",nullable = false)
     private DiarioModel diario;
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
+        DetalleDiarioModel that = (DetalleDiarioModel) o;
+        return getIdDetalleDiario() != null && Objects.equals(getIdDetalleDiario(), that.getIdDetalleDiario());
+    }
+
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
+    }
 }

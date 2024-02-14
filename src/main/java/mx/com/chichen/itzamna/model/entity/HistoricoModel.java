@@ -1,14 +1,19 @@
 package mx.com.chichen.itzamna.model.entity;
 
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.*;
+import org.hibernate.Hibernate;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Table(name = "tbl_historico")
-@Data
+@Getter
+@Setter
+@ToString
+@RequiredArgsConstructor
 public class HistoricoModel {
 
     @Id
@@ -16,7 +21,7 @@ public class HistoricoModel {
     @Column(name = "id_historico")
     private Long idHistorico;
 
-    @Column(name = "total_historico")
+    @Column(name = "total_historico",nullable = false,precision = 8,scale = 2)
     private Double totalHistorico;
 
     @Column(name = "estatus_historico")
@@ -26,5 +31,19 @@ public class HistoricoModel {
     private LocalDate fechaHistorico;
 
     @OneToMany(mappedBy = "historico",cascade = CascadeType.ALL)
+    @ToString.Exclude
     private List<DetalleHistoricoModel> detalleHistorico;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
+        HistoricoModel that = (HistoricoModel) o;
+        return getIdHistorico() != null && Objects.equals(getIdHistorico(), that.getIdHistorico());
+    }
+
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
+    }
 }
