@@ -27,7 +27,7 @@ public class DetalleVentaModel {
     @JoinColumn(name = "producto")
     private ProductoModel producto;
 
-    @Column(name = "total_detalle_venta",precision = 8, scale = 2,nullable = false)
+    @Column(name = "total_detalle_venta",precision = 8,nullable = false)
     private Double totalDetalleVenta;
 
 

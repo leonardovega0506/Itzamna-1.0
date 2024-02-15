@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.Hibernate;
 
+
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
@@ -31,7 +32,7 @@ public class CompraModel {
     @Column(name = "estatus_compra",nullable = false,length = 40)
     private String estatusCompra;
 
-    @Column(name = "total_Compra",nullable = false,precision = 8, scale = 2)
+    @Column(name = "total_Compra",nullable = false,precision = 8)
     private Double totalCompra;
 
     @Column(name = "factura_compra",nullable = false)

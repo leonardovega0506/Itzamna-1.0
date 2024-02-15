@@ -48,7 +48,7 @@ public class PacienteModel {
     @Column(name = "observaciones_paciente")
     private String observacionesPaciente;
 
-    @Column(name = "peso_paciente",precision = 3,scale = 2)
+    @Column(name = "peso_paciente",precision = 3)
     private Double peso_paciente;
 
     @ManyToOne

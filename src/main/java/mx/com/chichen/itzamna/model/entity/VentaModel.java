@@ -28,7 +28,7 @@ public class VentaModel {
     @Column(name = "hora_venta",nullable = false)
     private LocalTime horaVenta;
 
-    @Column(name = "total_venta",nullable = false,precision = 8, scale = 2)
+    @Column(name = "total_venta",nullable = false,precision = 8)
     private Double totalVenta;
 
     @Column(name = "estatus_venta",nullable = false,length = 40)

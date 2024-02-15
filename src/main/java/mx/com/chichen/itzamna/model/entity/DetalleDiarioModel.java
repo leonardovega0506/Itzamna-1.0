@@ -19,7 +19,7 @@ public class DetalleDiarioModel {
     @Column(name = "id_detalle_diario")
     private Long idDetalleDiario;
 
-    @Column(name = "total_detalle_venta",nullable = false,precision = 8, scale = 2)
+    @Column(name = "total_detalle_venta",nullable = false,precision = 8)
     private Double totalDetalleVenta;
 
     @ManyToOne

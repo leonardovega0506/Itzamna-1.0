@@ -28,10 +28,10 @@ public class ProductoModel{
     @Column(name = "clave_producto",length = 6,nullable = false,unique = true)
     private String claveProducto;
 
-    @Column(name = "costo_producto",precision = 8, scale = 2, nullable = false)
+    @Column(name = "costo_producto",precision = 8, nullable = false)
     private Double costoProducto;
 
-    @Column(name = "precio_producto",nullable = false,precision = 8,scale = 2)
+    @Column(name = "precio_producto",nullable = false,precision = 8)
     private Double precioProducto;
 
     @Column(name = "cantidad_producto",nullable = false)

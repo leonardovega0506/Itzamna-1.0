@@ -19,7 +19,7 @@ public class DetalleHistoricoModel {
     @Column(name = "id_detalle_diario")
     private Long idDetalleDiario;
 
-    @Column(name = "total_detalle_historico",nullable = false,precision = 8, scale = 2)
+    @Column(name = "total_detalle_historico",nullable = false,precision = 8)
     private Double totalDetalleHistorico;
 
     @ManyToOne

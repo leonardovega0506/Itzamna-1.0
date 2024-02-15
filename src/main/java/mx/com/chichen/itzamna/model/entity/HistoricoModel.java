@@ -21,7 +21,7 @@ public class HistoricoModel {
     @Column(name = "id_historico")
     private Long idHistorico;
 
-    @Column(name = "total_historico",nullable = false,precision = 8,scale = 2)
+    @Column(name = "total_historico",nullable = false,precision = 8)
     private Double totalHistorico;
 
     @Column(name = "estatus_historico")

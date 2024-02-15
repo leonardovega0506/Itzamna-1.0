@@ -21,7 +21,7 @@ public class DiarioModel {
     @Column(name = "id_diario")
     private Long idDiario;
 
-    @Column(name = "total_diario",nullable = false,precision = 9,scale = 2)
+    @Column(name = "total_diario",nullable = false,precision = 8)
     private Double totalDiario;
 
     @Column(name = "fecha_diario")

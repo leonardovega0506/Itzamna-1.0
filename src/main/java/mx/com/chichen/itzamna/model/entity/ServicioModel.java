@@ -28,10 +28,10 @@ public class ServicioModel {
     @Column(name = "clave_servicio",nullable = false,unique = true,length = 6)
     private String claveServicio;
 
-    @Column(name = "costo_servicio",precision = 8, scale = 2)
+    @Column(name = "costo_servicio",precision = 8)
     private Double costoServicio;
 
-    @Column(name = "precio_servicio",precision = 8, scale = 2)
+    @Column(name = "precio_servicio",precision = 8)
     private Double precioServicio;
 
     @Override
