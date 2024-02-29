@@ -1,6 +1,7 @@
 package mx.com.chichen.itzamna.service.interfaces;
 
 import mx.com.chichen.itzamna.model.dto.DiarioDTO;
+import mx.com.chichen.itzamna.model.dto.HistoricoDTO;
 import mx.com.chichen.itzamna.response.HistoricoResponse;
 import mx.com.chichen.itzamna.response.ListDetalleHistoricoResponse;
 import mx.com.chichen.itzamna.response.ListHistoricoResponse;
@@ -14,7 +15,7 @@ public interface IHistoricoService {
     ListHistoricoResponse findAllByMonth(int numPage, int sizePage, String orderBy, String sortDir,int month);
     ListHistoricoResponse findAllByWeek(int numPage, int sizePage, String orderBy, String sortDir, int week);
     HistoricoResponse findByHistorico(Long idHistorico);
-    HistoricoResponse saveHistorico(DiarioDTO diarioDTO);
-    ListDetalleHistoricoResponse findAllDetallesHistorico(Long idHistorico);
+    HistoricoResponse saveHistorico(HistoricoDTO historicoDTO);
+    ListDetalleHistoricoResponse findAllDetallesHistorico(int numPage, int sizePage, String orderBy, String sortDir,Long idHistorico);
 
 }

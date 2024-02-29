@@ -15,6 +15,7 @@ public class HistoricoDTO {
     private Long idHistorico;
     private Double totalHistorico;
     private LocalDate fechaHistorico;
+    private Integer semanaHistorico;
     private String estatusHistorico;
     private List<DetalleHistoricoModel> detalleHistorico;
 }

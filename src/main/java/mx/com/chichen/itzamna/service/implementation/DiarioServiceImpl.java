@@ -143,7 +143,7 @@ public class DiarioServiceImpl implements IDiarioService {
         }
         else{
             response.setCode(2);
-            response.setMessage("Not Found");
+            response.setMessage("Bad request");
         }
         return response;
     }

@@ -1,9 +1,12 @@
 package mx.com.chichen.itzamna.repositories;
 
 import mx.com.chichen.itzamna.model.entity.DetalleHistoricoModel;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
 public interface IDetalleHistoricoRepository extends JpaRepository<DetalleHistoricoModel,Long> {
+    Page<DetalleHistoricoModel> findByHistorico_IdHistorico(Long idHistorico, Pageable pageable);
 }

@@ -12,10 +12,10 @@ public interface IPacienteService {
     PacienteResponse savePaciente(PacienteDTO pacienteDTO);
     PacienteResponse findById(Long idPaciente);
     PacienteResponse updatePaciente(PacienteDTO pacienteDTO);
-    PacienteResponse deletePaciente(Long idPaciente);
-    ListServicioPacienteResponse findServiciosPaciente(Long idPaciente);
-    PacienteResponse assingPaciente(Long idPropietario);
-    PacienteResponse assignServicio(Long idServicio);
-    PacienteResponse deleteServicio(Long idServicio);
+    void deletePaciente(Long idPaciente);
+    ListServicioPacienteResponse findServiciosPaciente(Long idCompra, int numPage, int sizePage, String orderBy, String sortDir,Long idPaciente);
+    PacienteResponse assingPaciente(Long idPropietario,Long idPaciente);
+    PacienteResponse assignServicio(Long idServicio,Long idPaciente);
+    void deleteServicio(Long idServicio,Long idPaciente);
 
 }

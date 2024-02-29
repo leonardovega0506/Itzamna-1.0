@@ -24,6 +24,9 @@ public class HistoricoModel {
     @Column(name = "total_historico",nullable = false,precision = 8)
     private Double totalHistorico;
 
+    @Column(name = "semana_historico")
+    private Integer semanaHistorico;
+
     @Column(name = "estatus_historico")
     private String estatusHistorico;
 

@@ -1,8 +1,10 @@
 package mx.com.chichen.itzamna.service.implementation;
 
 import lombok.RequiredArgsConstructor;
+import mx.com.chichen.itzamna.model.dto.DetalleHistoricoDTO;
 import mx.com.chichen.itzamna.model.dto.DiarioDTO;
 import mx.com.chichen.itzamna.model.dto.HistoricoDTO;
+import mx.com.chichen.itzamna.model.entity.DetalleHistoricoModel;
 import mx.com.chichen.itzamna.model.entity.HistoricoModel;
 import mx.com.chichen.itzamna.repositories.IDetalleHistoricoRepository;
 import mx.com.chichen.itzamna.repositories.IHistoricoRepository;
@@ -19,6 +21,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.Calendar;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -109,21 +112,88 @@ public class HistoricoServiceImpl implements IHistoricoService {
 
     @Override
     public ListHistoricoResponse findAllByWeek(int numPage, int sizePage, String orderBy, String sortDir, int week) {
-        return null;
+        ListHistoricoResponse response = new ListHistoricoResponse();
+
+        Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(orderBy).ascending() : Sort.by(orderBy).descending();
+        Pageable pageable = PageRequest.of(numPage,sizePage,sort);
+
+        Page<HistoricoModel> historicos = iHistorico.findBySemanaHistorico(week,pageable);
+
+        List<HistoricoModel> listaHistorico = historicos.getContent();
+        List<HistoricoDTO> contenido = listaHistorico.stream().map(historico ->modelMapper.mapear(historico,HistoricoDTO.class)).collect(Collectors.toList());
+        if(contenido.size()>0){
+            response.setCode(0);
+            response.setMessage("Response exitoso");
+        }
+        else{
+            response.setCode(1);
+            response.setMessage("Not Found");
+        }
+        response.setContent(contenido);
+        response.setNumPage(historicos.getNumber());
+        response.setSizePage(historicos.getSize());
+        response.setTotalElements(historicos.getTotalElements());
+        response.setTotalPages(historicos.getTotalPages());
+        response.setIsLast(historicos.isLast());
+        return response;
     }
 
     @Override
     public HistoricoResponse findByHistorico(Long idHistorico) {
-        return null;
+        HistoricoDTO historicoBuscar = modelMapper.mapear(iHistorico.findById(idHistorico).orElseThrow(),HistoricoDTO.class);
+        HistoricoResponse response = new HistoricoResponse();
+        response.setCode(0);
+        response.setMessage("Response exitoso");
+        response.setResponse(historicoBuscar);
+        return response;
     }
 
     @Override
-    public HistoricoResponse saveHistorico(DiarioDTO diarioDTO) {
-        return null;
+    public HistoricoResponse saveHistorico(HistoricoDTO historicoDTO) {
+        HistoricoModel historicoNuevo;
+        List<DetalleHistoricoModel> detalle = historicoDTO.getDetalleHistorico();
+        iDetalleH.saveAll(detalle);
+        Calendar calendar = Calendar.getInstance();
+        int numSem = calendar.get(Calendar.WEEK_OF_YEAR);
+        historicoDTO.setSemanaHistorico(numSem);
+        historicoDTO.setDetalleHistorico(detalle);
+        historicoNuevo = iHistorico.save(modelMapper.mapear(historicoDTO,HistoricoModel.class));
+        HistoricoResponse response = new HistoricoResponse();
+        response.setCode(0);
+        response.setMessage("Response exitoso");
+        response.setResponse(modelMapper.mapear(historicoNuevo,HistoricoDTO.class));
+        return response;
     }
 
     @Override
-    public ListDetalleHistoricoResponse findAllDetallesHistorico(Long idHistorico) {
-        return null;
+    public ListDetalleHistoricoResponse findAllDetallesHistorico(int numPage, int sizePage, String orderBy, String sortDir,Long idHistorico) {
+        ListDetalleHistoricoResponse response = new ListDetalleHistoricoResponse();
+        Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(orderBy).ascending() : Sort.by(orderBy).descending();
+        if(idHistorico != 0){
+            Pageable pageable = PageRequest.of(numPage,sizePage,sort);
+            Page<DetalleHistoricoModel> detalles = iDetalleH.findByHistorico_IdHistorico(idHistorico,pageable);
+
+            List<DetalleHistoricoModel> listaDetalles = detalles.getContent();
+            List<DetalleHistoricoDTO> contenido = listaDetalles.stream().map(detalle -> modelMapper.mapear(detalle,DetalleHistoricoDTO.class)).collect(Collectors.toList());
+            if(contenido.size()>0){
+                response.setCode(0);
+                response.setMessage("Response exitoso");
+            }
+            else{
+                response.setCode(1);
+                response.setMessage("Not Found");
+            }
+            response.setContent(contenido);
+            response.setNumPage(detalles.getNumber());
+            response.setSizePage(detalles.getSize());
+            response.setTotalElements(detalles.getTotalElements());
+            response.setTotalPages(detalles.getTotalPages());
+            response.setIsLast(detalles.isLast());
+        }
+        else{
+            response.setCode(2);
+            response.setMessage("Bad request");
+        }
+        return response;
     }
 }
