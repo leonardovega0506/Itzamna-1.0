@@ -1,5 +1,8 @@
 package mx.com.chichen.itzamna.service.implementation;
 
+import com.twilio.Twilio;
+import com.twilio.rest.api.v2010.account.Message;
+import com.twilio.type.PhoneNumber;
 import lombok.RequiredArgsConstructor;
 import mx.com.chichen.itzamna.model.dto.PacienteDTO;
 import mx.com.chichen.itzamna.model.dto.PropietarioDTO;
@@ -24,6 +27,9 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class PropietarioServiceImpl implements IPropietarioService {
+
+    public static final String ACCOUNT_SID = "AC100130f2bf8f8a734e4b0ad0c5022812";
+    public static final String AUTH_TOKEN = "d6b8c13640013c65762367dd83cf8f96";
 
     @Autowired
     private IPropietarioRepository iPropietario;
@@ -117,6 +123,17 @@ public class PropietarioServiceImpl implements IPropietarioService {
         response.setMessage("Response exitoso");
         response.setResponse(modelMapper.mapear(propietarioNuevo,PropietarioDTO.class));
         return response;
+    }
+
+    @Override
+    public void sendMessagePropietario(String mensaje, Long idPropietario) {
+        PropietarioDTO propietarioBuscar = modelMapper.mapear(iPropietario.findById(idPropietario).orElseThrow(),PropietarioDTO.class);
+        Twilio.init(ACCOUNT_SID, AUTH_TOKEN);
+        Message message = Message.creator(
+                        new PhoneNumber("whatsapp:"+propietarioBuscar.getTelefonoPropietario()),
+                        new PhoneNumber("whatsapp:+14155238886"),
+                        "Te vigilo")
+                .create();
     }
 
     @Override

@@ -11,5 +11,6 @@ public interface IPropietarioService {
     PropietarioResponse savePropietario(PropietarioDTO propietarioDTO);
     PropietarioResponse findById(Long idPropietario);
     PropietarioResponse updatePropietario(PropietarioDTO propietarioDTO);
+    void sendMessagePropietario(String mensaje, Long idPropietario);
     void deletePropietario(Long idPropietario);
 }

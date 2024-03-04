@@ -7,10 +7,13 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface ICitaRepository extends JpaRepository<CitaModel,Long> {
+    Optional<CitaModel> findByFechaCitaAndHoraCita(LocalDate fechaCita, LocalTime horaCita);
     Page<CitaModel> findByPaciente_IdPaciente(Long idPaciente, Pageable pageable);
     Page<CitaModel> findByEstatusCita(String estatusCita, Pageable pageable);
     Page<CitaModel> findByFechaCita(LocalDate fechaCita, Pageable pageable);

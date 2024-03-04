@@ -1,12 +1,9 @@
 package mx.com.chichen.itzamna.service.implementation;
 
 import lombok.RequiredArgsConstructor;
-import mx.com.chichen.itzamna.model.dto.PacienteDTO;
 import mx.com.chichen.itzamna.model.dto.ProveedorDTO;
-import mx.com.chichen.itzamna.model.entity.PacienteModel;
 import mx.com.chichen.itzamna.model.entity.ProveedorModel;
 import mx.com.chichen.itzamna.repositories.IProveedorRepository;
-import mx.com.chichen.itzamna.response.ListPacienteResponse;
 import mx.com.chichen.itzamna.response.ListProveedorResponse;
 import mx.com.chichen.itzamna.response.ProveedorResponse;
 import mx.com.chichen.itzamna.service.interfaces.IProveedorService;
@@ -17,9 +14,11 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.stream.Collectors;
+import com.twilio.Twilio;
+import com.twilio.rest.api.v2010.account.Message;
+import com.twilio.type.PhoneNumber;
 
 @Service
 @RequiredArgsConstructor
@@ -30,6 +29,9 @@ public class ProveedorServiceImpl implements IProveedorService {
 
     @Autowired
     private MapperServiceImpl modelMapper;
+
+    public static final String ACCOUNT_SID = "AC100130f2bf8f8a734e4b0ad0c5022812";
+    public static final String AUTH_TOKEN = "d6b8c13640013c65762367dd83cf8f96";
 
     @Override
     public ListProveedorResponse findAllProveedor(int numPage, int sizePage, String orderBy, String sortDir) {
@@ -121,7 +123,10 @@ public class ProveedorServiceImpl implements IProveedorService {
 
     @Override
     public void sendMessageProveedor(String mensaje, Long idProveedor) {
-
+        ProveedorDTO proveedorBuscar = modelMapper.mapear(iProveedor.findById(idProveedor),ProveedorDTO.class);
+        Twilio.init(ACCOUNT_SID,AUTH_TOKEN);
+        Message message = Message.creator(new PhoneNumber("whatsapp:"+proveedorBuscar.getTelefonoProveedor()),
+                new PhoneNumber("whatsapp:+14155238886"),mensaje).create();
     }
 
     @Override

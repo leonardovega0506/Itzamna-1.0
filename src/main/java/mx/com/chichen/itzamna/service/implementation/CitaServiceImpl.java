@@ -1,11 +1,16 @@
 package mx.com.chichen.itzamna.service.implementation;
 
+import com.twilio.Twilio;
+import com.twilio.rest.api.v2010.account.Message;
+import com.twilio.type.PhoneNumber;
 import mx.com.chichen.itzamna.model.dto.CitaDTO;
+import mx.com.chichen.itzamna.model.dto.ProveedorDTO;
 import mx.com.chichen.itzamna.model.entity.CitaModel;
 import mx.com.chichen.itzamna.repositories.ICitaRepository;
 import mx.com.chichen.itzamna.response.CitaResponse;
 import mx.com.chichen.itzamna.response.ListCitaResponse;
 import mx.com.chichen.itzamna.service.interfaces.ICitaService;
+import mx.com.chichen.itzamna.util.MapperServiceImpl;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -26,7 +31,10 @@ public class CitaServiceImpl implements ICitaService {
     private ICitaRepository iCita;
 
     @Autowired
-    private ModelMapper modelMapper;
+    private MapperServiceImpl modelMapper;
+
+    public static final String ACCOUNT_SID = "AC100130f2bf8f8a734e4b0ad0c5022812";
+    public static final String AUTH_TOKEN = "d6b8c13640013c65762367dd83cf8f96";
 
     @Override
     public ListCitaResponse findAllCitas(int numPage, int sizePage, String orderBy, String sortDir) {
@@ -39,7 +47,7 @@ public class CitaServiceImpl implements ICitaService {
         Page<CitaModel> citas = iCita.findAll(pageable);
 
         List<CitaModel> listaCita = citas.getContent();
-        List<CitaDTO> contenido = listaCita.stream().map(cita -> mapearDTO(cita)).collect(Collectors.toList());
+        List<CitaDTO> contenido = listaCita.stream().map(cita -> modelMapper.mapear(cita,CitaDTO.class)).collect(Collectors.toList());
 
         if (contenido.size() > 0) {
             response.setCode(0);
@@ -75,7 +83,7 @@ public class CitaServiceImpl implements ICitaService {
         Page<CitaModel> citas = iCita.findByFechaCita(fecha,pageable);
 
         List<CitaModel> listaCita = citas.getContent();
-        List<CitaDTO> contenido = listaCita.stream().map(cita -> mapearDTO(cita)).collect(Collectors.toList());
+        List<CitaDTO> contenido = listaCita.stream().map(cita -> modelMapper.mapear(cita,CitaDTO.class)).collect(Collectors.toList());
 
         if (contenido.size() > 0) {
             response.setCode(0);
@@ -111,7 +119,7 @@ public class CitaServiceImpl implements ICitaService {
         Page<CitaModel> citas = iCita.findByEstatusCita(estatus,pageable);
 
         List<CitaModel> listaCita = citas.getContent();
-        List<CitaDTO> contenido = listaCita.stream().map(cita -> mapearDTO(cita)).collect(Collectors.toList());
+        List<CitaDTO> contenido = listaCita.stream().map(cita -> modelMapper.mapear(cita,CitaDTO.class)).collect(Collectors.toList());
 
         if (contenido.size() > 0) {
             response.setCode(0);
@@ -147,7 +155,7 @@ public class CitaServiceImpl implements ICitaService {
         Page<CitaModel> citas = iCita.findByPaciente_IdPaciente(idPaciente,pageable);
 
         List<CitaModel> listaCita = citas.getContent();
-        List<CitaDTO> contenido = listaCita.stream().map(cita -> mapearDTO(cita)).collect(Collectors.toList());
+        List<CitaDTO> contenido = listaCita.stream().map(cita -> modelMapper.mapear(cita,CitaDTO.class)).collect(Collectors.toList());
 
         if (contenido.size() > 0) {
             response.setCode(0);
@@ -174,7 +182,7 @@ public class CitaServiceImpl implements ICitaService {
 
     @Override
     public CitaResponse findCitaById(Long idCita) {
-        CitaDTO citaBuscada = mapearDTO(iCita.findById(idCita).orElseThrow());
+        CitaDTO citaBuscada = modelMapper.mapear(iCita.findById(idCita).orElseThrow(),CitaDTO.class);
         CitaResponse response = new CitaResponse();
         response.setCode(0);
         response.setMessage("Response existoso");
@@ -183,8 +191,9 @@ public class CitaServiceImpl implements ICitaService {
     }
 
     @Override
-    public CitaResponse verificarDisponibilidad(LocalDate fecha, LocalTime hora) {
-        return null;
+    public boolean verificarDisponibilidad(LocalDate fecha, LocalTime hora) {
+        CitaDTO citaBuscada = modelMapper.mapear(iCita.findByFechaCitaAndHoraCita(fecha,hora).orElseThrow(),CitaDTO.class);
+        return true;
     }
 
     @Override
@@ -194,21 +203,29 @@ public class CitaServiceImpl implements ICitaService {
 
     @Override
     public CitaResponse saveCita(CitaDTO cita) {
-        CitaModel citaNuevo = iCita.save(mapearEntidad(cita));
+        CitaModel citaNuevo = iCita.save(modelMapper.mapear(cita,CitaModel.class));
         CitaResponse response = new CitaResponse();
         response.setCode(0);
         response.setMessage("Response exitoso");
-        response.setResponse(mapearDTO(citaNuevo));
+        response.setResponse(modelMapper.mapear(citaNuevo,CitaDTO.class));
         return response;
     }
 
     @Override
+    public void sendMessageProveedor(String mensaje, Long idCita) {
+        CitaDTO citaBuscar = modelMapper.mapear(iCita.findById(idCita),CitaDTO.class);
+        Twilio.init(ACCOUNT_SID,AUTH_TOKEN);
+        Message message = Message.creator(new PhoneNumber("whatsapp:"+citaBuscar.getPaciente().getPropietario().getTelefonoPropietario()),
+                new PhoneNumber("whatsapp:+14155238886"),mensaje).create();
+    }
+
+    @Override
     public CitaResponse updateCita(CitaDTO cita) {
-        CitaModel citaNuevo = iCita.save(mapearEntidad(cita));
+        CitaModel citaNuevo = iCita.save(modelMapper.mapear(cita, CitaModel.class));
         CitaResponse response = new CitaResponse();
         response.setCode(0);
         response.setMessage("Response exitoso");
-        response.setResponse(mapearDTO(citaNuevo));
+        response.setResponse(modelMapper.mapear(citaNuevo,CitaDTO.class));
         return response;
     }
 
@@ -217,13 +234,4 @@ public class CitaServiceImpl implements ICitaService {
         iCita.deleteById(idCita);
     }
 
-    private CitaModel mapearEntidad(CitaDTO citaDTO) {
-        CitaModel cita = modelMapper.map(citaDTO, CitaModel.class);
-        return cita;
-    }
-
-    private CitaDTO mapearDTO(CitaModel citaModel) {
-        CitaDTO cita = modelMapper.map(citaModel, CitaDTO.class);
-        return cita;
-    }
 }
