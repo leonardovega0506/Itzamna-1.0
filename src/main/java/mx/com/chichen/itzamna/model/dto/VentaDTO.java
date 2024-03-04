@@ -20,5 +20,6 @@ public class VentaDTO {
     private Double totalVenta;
     private String estatusVenta;
     private String tipoPago;
+    private Integer week;
     private List<DetalleVentaModel> detalleVenta;
 }

@@ -37,6 +37,9 @@ public class VentaModel {
     @Column(name = "tipo_pago",nullable = false,length = 40)
     private String tipoPago;
 
+    @Column(name = "week")
+    private Integer week;
+
     @OneToMany(mappedBy = "venta")
     @ToString.Exclude
     private List<DetalleVentaModel> detalleVenta;

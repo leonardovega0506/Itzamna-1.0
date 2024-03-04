@@ -12,6 +12,6 @@ public interface IProductoService {
     ListProductoResponse findAllProductoByClave(int numPage, int sizePage, String orderBy, String sortDir,String clave);
     ProductoResponse saveProducto(ProductoDTO productoDTO);
     ProductoResponse updateProducto(ProductoDTO productoDTO);
-    ProductoResponse deleteProducto(Long idProducto);
-    ProductoResponse assignProducto(Long idProveedor);
+    void deleteProducto(Long idProducto);
+    ProductoResponse assignProducto(Long idProveedor,Long idProducto);
 }

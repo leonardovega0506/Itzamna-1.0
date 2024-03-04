@@ -14,7 +14,7 @@ public interface IVentaService {
     ListVentaResponse findAllVentasDate(int numPage, int sizePage, String orderBy, String sortDir, LocalDate fecha);
     VentaResponse saveVentas(VentaDTO ventaDTO);
     VentaResponse updateVentas(VentaDTO ventaDTO);
-    VentaResponse deleteVentas(Long idVenta);
+    void deleteVentas(Long idVenta);
     VentaResponse findById(Long idVenta);
 
 }

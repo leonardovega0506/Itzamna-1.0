@@ -10,6 +10,6 @@ public interface IResponsivaService {
     ListResponsivaResponse findAllResponsivaByPaciente(int numPage, int sizePage, String orderBy, String sortDir, Long idPaciente);
     ListResponsivaResponse findAllResponsivaByCategoria(int numPage, int sizePage, String orderBy, String sortDir,String categoria);
     ResponsivaResponse saveResponsiva(ResponsivaDTO responsivaDTO);
-    ResponsivaResponse deleteResponsiva(Long idResponsiva);
+    void deleteResponsiva(Long idResponsiva);
 
 }

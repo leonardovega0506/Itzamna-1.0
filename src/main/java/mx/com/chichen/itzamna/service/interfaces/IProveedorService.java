@@ -12,5 +12,5 @@ public interface IProveedorService {
     ProveedorResponse findById(Long idProveedor);
     ProveedorResponse updateProveedor(ProveedorDTO proveedorDTO);
     void sendMessageProveedor(String mensaje, Long idProveedor);
-    ProveedorResponse deleteProveedor(Long idProveedor);
+    void deleteProveedor(Long idProveedor);
 }

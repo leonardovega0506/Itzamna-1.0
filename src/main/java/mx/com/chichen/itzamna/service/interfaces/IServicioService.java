@@ -10,6 +10,6 @@ public interface IServicioService {
     ListServicioResponse findAllPacienteByClave(int numPage, int sizePage, String orderBy, String sortDir,String clave);
     ServicioResponse saveServicio(ServicioDTO servicioDTO);
     ServicioResponse updateServicio(ServicioDTO servicioDTO);
-    ServicioResponse deleteService(Long idServicio);
+    void deleteService(Long idServicio);
 
 }
