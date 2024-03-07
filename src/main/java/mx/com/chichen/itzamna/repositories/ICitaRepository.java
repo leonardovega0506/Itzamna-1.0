@@ -13,7 +13,7 @@ import java.util.Optional;
 
 @Repository
 public interface ICitaRepository extends JpaRepository<CitaModel,Long> {
-    Optional<CitaModel> findByFechaCitaAndHoraCita(LocalDate fechaCita, LocalTime horaCita);
+    List<CitaModel> getByFechaCita(LocalDate fechaCita);
     Page<CitaModel> findByPaciente_IdPaciente(Long idPaciente, Pageable pageable);
     Page<CitaModel> findByEstatusCita(String estatusCita, Pageable pageable);
     Page<CitaModel> findByFechaCita(LocalDate fechaCita, Pageable pageable);

@@ -117,12 +117,12 @@ public class DiarioServiceImpl implements IDiarioService {
     }
 
     @Override
-    public ListDetalleDiarioResponse findDetalleDiario(Long idCompra, int numPage, int sizePage, String orderBy, String sortDir,Long idDetalle) {
+    public ListDetalleDiarioResponse findDetalleDiario(Long idDiario, int numPage, int sizePage, String orderBy, String sortDir) {
         ListDetalleDiarioResponse response = new ListDetalleDiarioResponse();
         Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(orderBy).ascending() : Sort.by(orderBy).descending();
-        if(idDetalle!=0){
+        if(idDiario!=0){
             Pageable pageable = PageRequest.of(numPage,sizePage,sort);
-            Page<DetalleDiarioModel> detalles = iDetalleD.findByDiario_IdDiario(idDetalle,pageable);
+            Page<DetalleDiarioModel> detalles = iDetalleD.findByDiario_IdDiario(idDiario,pageable);
 
             List<DetalleDiarioModel> listaDetalles = detalles.getContent();
             List<DetalleDiarioDTO> contenido = listaDetalles.stream().map(detalle -> modelMapper.mapear(detalle, DetalleDiarioDTO.class)).collect(Collectors.toList());

@@ -13,5 +13,5 @@ public interface IDiarioService {
     DiarioResponse updateDiario(DiarioDTO diarioDTO);
     void deleteDiario(Long idDiario);
     DiarioResponse cerrarDiario(Long idDiario);
-    ListDetalleDiarioResponse findDetalleDiario(Long idCompra, int numPage, int sizePage, String orderBy, String sortDir,Long idDetalle);
+        ListDetalleDiarioResponse findDetalleDiario(Long idDiario, int numPage, int sizePage, String orderBy, String sortDir);
 }

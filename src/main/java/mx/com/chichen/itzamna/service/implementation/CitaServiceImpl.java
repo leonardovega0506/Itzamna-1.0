@@ -22,6 +22,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -182,27 +183,74 @@ public class CitaServiceImpl implements ICitaService {
 
     @Override
     public CitaResponse findCitaById(Long idCita) {
-        CitaDTO citaBuscada = modelMapper.mapear(iCita.findById(idCita).orElseThrow(),CitaDTO.class);
-        CitaResponse response = new CitaResponse();
-        response.setCode(0);
-        response.setMessage("Response existoso");
-        response.setResponse(citaBuscada);
-        return response;
+        Optional<CitaModel> citaBuscada = iCita.findById(idCita);
+        if(!citaBuscada.isEmpty()){
+            CitaResponse response = new CitaResponse();
+            response.setCode(0);
+            response.setMessage("Response existoso");
+            response.setResponse(modelMapper.mapear(citaBuscada.get(),CitaDTO.class));
+            return response;
+        }
+        else{
+            CitaResponse response = new CitaResponse();
+            response.setCode(1);
+            response.setMessage("No encontrado");
+            response.setResponse(null);
+            return response;
+        }
+
     }
 
     @Override
-    public boolean verificarDisponibilidad(LocalDate fecha, LocalTime hora) {
-        CitaDTO citaBuscada = modelMapper.mapear(iCita.findByFechaCitaAndHoraCita(fecha,hora).orElseThrow(),CitaDTO.class);
-        return true;
+    public CitaResponse verificarDisponibilidad(LocalDate fecha, LocalTime hora) {
+        CitaResponse response = new CitaResponse();
+        List<CitaModel> citasBuscadas = iCita.getByFechaCita(fecha);
+        if(citasBuscadas.size()>0){
+            CitaDTO citaBuscada = modelMapper.mapear(citasBuscadas.stream().filter(cita -> cita.getHoraCita().equals(hora)).findFirst(),CitaDTO.class);
+            if(citaBuscada.getIdCita()==null){
+                response.setCode(0);
+                response.setMessage("Se encontro disponibilidad");
+            }
+            else{
+                response.setCode(1);
+                response.setMessage("No se encontro disponibilidad");
+                response.setResponse(citaBuscada);
+            }
+            return response;
+        }
+        else{
+            response.setCode(0);
+            response.setMessage("Se encontro disponibilidad");
+            return response;
+        }
+
     }
 
     @Override
     public CitaResponse cancelarCita(Long idCita) {
-        return null;
+        CitaResponse response = new CitaResponse();
+        Optional<CitaModel> citaBuscada = iCita.findById(idCita);
+        if(citaBuscada.isEmpty()) {
+            response.setCode(1);
+            response.setMessage("Not found");
+            return response;
+        }
+        else{
+            CitaDTO cita = modelMapper.mapear(citaBuscada.get(),CitaDTO.class);
+            cita.setEstatusCita("Cancelado");
+            iCita.save(modelMapper.mapear(cita, CitaModel.class));
+
+            response.setCode(0);
+            response.setMessage("Response existoso");
+            response.setResponse(cita);
+            return response;
+        }
+
     }
 
     @Override
     public CitaResponse saveCita(CitaDTO cita) {
+        cita.setEstatusCita("Agendado");
         CitaModel citaNuevo = iCita.save(modelMapper.mapear(cita,CitaModel.class));
         CitaResponse response = new CitaResponse();
         response.setCode(0);

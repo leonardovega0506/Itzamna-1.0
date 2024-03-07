@@ -13,7 +13,7 @@ public interface IPacienteService {
     PacienteResponse findById(Long idPaciente);
     PacienteResponse updatePaciente(PacienteDTO pacienteDTO);
     void deletePaciente(Long idPaciente);
-    ListServicioPacienteResponse findServiciosPaciente(Long idCompra, int numPage, int sizePage, String orderBy, String sortDir,Long idPaciente);
+    ListServicioPacienteResponse findServiciosPaciente(int numPage, int sizePage, String orderBy, String sortDir,Long idPaciente);
     PacienteResponse assingPaciente(Long idPropietario,Long idPaciente);
     PacienteResponse assignServicio(Long idServicio,Long idPaciente);
     void deleteServicio(Long idServicio,Long idPaciente);

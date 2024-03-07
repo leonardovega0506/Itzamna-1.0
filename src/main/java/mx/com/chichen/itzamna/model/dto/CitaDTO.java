@@ -13,7 +13,7 @@ public class CitaDTO {
 
     private Long idCita;
     private LocalDate fechaCita;
-    private LocalTime horaCita;
+    private String horaCita;
     private String estatusCita;
     private PacienteModel paciente;
     private ServicioModel servicio;

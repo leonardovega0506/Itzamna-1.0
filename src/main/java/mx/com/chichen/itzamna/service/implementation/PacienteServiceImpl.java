@@ -143,10 +143,10 @@ public class PacienteServiceImpl implements IPacienteService {
     }
 
     @Override
-    public ListServicioPacienteResponse findServiciosPaciente(Long idCompra, int numPage, int sizePage, String orderBy, String sortDir,Long idPaciente) {
+    public ListServicioPacienteResponse findServiciosPaciente( int numPage, int sizePage, String orderBy, String sortDir,Long idPaciente) {
         ListServicioPacienteResponse response = new ListServicioPacienteResponse();
         Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(orderBy).ascending() : Sort.by(orderBy).descending();
-        if(idCompra!=0){
+        if(idPaciente!=0){
             Pageable pageable = PageRequest.of(numPage,sizePage,sort);
             Page<ServicioPacienteModel> servicios = iServicio.findByPaciente_IdPaciente(idPaciente,pageable);
 

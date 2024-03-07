@@ -25,17 +25,17 @@ public class CitaModel {
     private LocalDate fechaCita;
 
     @Column(name = "hora_cita")
-    private LocalTime horaCita;
+    private String horaCita;
 
     @Column(name = "estatus_cita",nullable = false,length = 40)
     private String estatusCita;
 
     @ManyToOne
-    @JoinColumn(name = "paciente",nullable = false)
+    @JoinColumn(name = "paciente",nullable = true)
     private PacienteModel paciente;
 
     @ManyToOne
-    @JoinColumn(name = "servicio",nullable = false)
+    @JoinColumn(name = "servicio",nullable = true)
     private ServicioModel servicio;
 
     @Override

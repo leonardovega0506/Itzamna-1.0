@@ -16,5 +16,5 @@ public interface ICompraService {
     CompraResponse saveCompra(CompraDTO compraDTO);
     CompraResponse updateCompra(CompraDTO compraDTO);
     void deleteCompra(Long idCompra);
-    ListDetalleCompraResponse findDetallesCompra(Long idCompra,int numPage, int sizePage, String orderBy, String sortDir,Long idDetalle);
+    ListDetalleCompraResponse findDetallesCompra(Long idCompra,int numPage, int sizePage, String orderBy, String sortDir);
 }

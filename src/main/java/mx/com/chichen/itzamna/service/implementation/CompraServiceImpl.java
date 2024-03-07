@@ -20,6 +20,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -132,6 +133,9 @@ public class CompraServiceImpl implements ICompraService {
 
     @Override
     public CompraResponse saveCompra(CompraDTO compraDTO) {
+        compraDTO.setFechaCompra(LocalDate.now());
+        compraDTO.setHoraCompra(LocalTime.now());
+        compraDTO.setEstatusCompra("Abierto");
         List<DetalleCompraModel> detallesNuevos = compraDTO.getDetallesCompra();
         iDetalleC.saveAll(detallesNuevos);
 
@@ -161,11 +165,11 @@ public class CompraServiceImpl implements ICompraService {
     }
 
     @Override
-    public ListDetalleCompraResponse findDetallesCompra(Long idCompra, int numPage, int sizePage, String orderBy, String sortDir,Long idDetalle) {
+    public ListDetalleCompraResponse findDetallesCompra(Long idCompra, int numPage, int sizePage, String orderBy, String sortDir) {
 
         ListDetalleCompraResponse response = new ListDetalleCompraResponse();
         Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(orderBy).ascending() : Sort.by(orderBy).descending();
-        if(idDetalle !=0){
+        if(idCompra !=0){
             Pageable pageable = PageRequest.of(numPage, sizePage, sort);
             Page<DetalleCompraModel> detalles = iDetalleC.findByCompra_IdCompra(idCompra, pageable);
 
